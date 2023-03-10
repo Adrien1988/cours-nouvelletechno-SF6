@@ -1,0 +1,11 @@
+{% for label, messages in app.flashes %} {# avec la boucle for on récupère un label et les messages dans app.flashes qui va contenir tous les messages que nous allons utiliser pour avertir l'utilisateur dans sa navigation  #}
+	{% for message in messages %} {# avec cette boucle for on va récupèré 1 message dans les messages #}
+		<div class="alert alert-{{ label }} alert-dismissible" role="alert"> {# sur cette ligne le label entre crochets permet de récupérer la couleur de mon alerte (exemple: warning, primary, secondary, success, danger, info, etc... #}
+			<button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+			<div class="alert-message">
+				{{ message|raw }} {# on injecte le message et on ajoute le "raw" si il y a du HTML à interprèté #}
+			</div>
+		</div>
+	{% endfor %}
+
+{% endfor %}

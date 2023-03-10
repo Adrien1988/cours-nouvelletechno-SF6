@@ -1,19 +1,47 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Acceuil
+			{% endblock %}
+			- Site e-commerce Symfony 6</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		{# la ligne meta viewport n'est pas mise automatiquement dans symphony au niveau de la page base.html.twig, cette ligne sert pour la responsivité de votre site #}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+
+		{# Feuilles de styles #}
+		<link
+		rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"> {# dans le href on va mettre entre les guillemets une écriture twig appelé asset qui permettra d'aller chercher le chemin indiqué entre parenthèses. Ce chemin correspond aux fichiers qui se trouvent dans le dossier public #}
+		{% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="{{ asset('assets/css/styles.css')}}">{# Le fait de mettre les liens hors du block stylesheets, permet d'éviter les erreurs et les oublis. Car il faut, , si les liens se trouvent dans le block stylesheets, ajouter dans le fichier où on appelle ce block la fonction "{{ parent() }}. Si cette fonction n'est pas mise, les liens se trouvant dns le block stylesheets du fichier base, seront remplacés par les éléments qui seront intégrés dans le fichier du composant. #}
+
+		{# Fichiers JS #}<script src="{{ asset('assets/js/bootstrap.bundle.min.js')}}" defer> </script>
+		{# le defer permet de déféré la lecture du script js afin que celle-ci se fasse avant le chargement du DOM #}
+
+		{% block javascripts %}{% endblock %}
+
+		<script src="{{ asset('assets/js/scripts.js')}}" defer></script>
+	</head>
+	<body>
+
+		{% include "_partials/_nav.html.twig" %}
+
+		{% if app.user and app.user.isVerified == false %}
+			<div class="alert alert-warning alert-dismissible" role="alert">
+				<button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+				<div class="alert-message">
+					<strong>Votre compte n'est pas activé</strong>, renvoyer le lien d'activation
+				</div>
+			</div>
+		{% endif %}
+
+		{% include "_partials/_flash.html.twig" %}
+
+		{% block body %}{% endblock %}
+
+		{% include "_partials/_footer.html.twig" %}
+
+	</body>
 </html>
